@@ -1,32 +1,35 @@
 package com.zkz.yunApi.controller;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.gson.Gson;
 import com.zkz.yunApi.annotation.AuthCheck;
-import com.zkz.yunApi.common.BaseResponse;
-import com.zkz.yunApi.common.DeleteRequest;
-import com.zkz.yunApi.common.ErrorCode;
-import com.zkz.yunApi.common.ResultUtils;
+import com.zkz.yunApi.common.*;
 import com.zkz.yunApi.constant.CommonConstant;
 import com.zkz.yunApi.exception.BusinessException;
-
 import com.zkz.yunApi.model.dto.interfaces.InterfaceInfoAddRequest;
+import com.zkz.yunApi.model.dto.interfaces.InterfaceInfoInvokeRequest;
 import com.zkz.yunApi.model.dto.interfaces.InterfaceInfoQueryRequest;
 import com.zkz.yunApi.model.dto.interfaces.InterfaceInfoUpdateRequest;
 import com.zkz.yunApi.model.entity.InterfaceInfo;
 import com.zkz.yunApi.model.entity.User;
+import com.zkz.yunApi.model.enums.InterfaceInfoStatusEnum;
 import com.zkz.yunApi.service.InterfaceInfoService;
 import com.zkz.yunApi.service.UserService;
+import com.zkz.yunapiclientsdk.client.YunApiClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 
 /**
- * 帖子接口
+ * 接口管理
  *
  * @author zkz
  */
@@ -37,9 +40,10 @@ public class InterfaceInfoController {
 
     @Resource
     private InterfaceInfoService interfaceInfoService;
-
     @Resource
     private UserService userService;
+    @Resource
+    private YunApiClient yunApiClient;
 
     // region 增删改查
 
@@ -194,6 +198,109 @@ public class InterfaceInfoController {
         return ResultUtils.success(interfaceInfoPage);
     }
 
-    // endregion
 
+    /**
+     * 发布
+     *
+     * @param idRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/online")
+    @AuthCheck(mustRole = "admin")
+
+    public BaseResponse<Boolean> onLineInterfaceInfo(@RequestBody IdRequest idRequest,
+                                                     HttpServletRequest request) throws UnsupportedEncodingException {
+
+        //参数不为空
+        if (idRequest == null || idRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        long id = idRequest.getId();
+        // 判断接口是否存在
+        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
+        if (oldInterfaceInfo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        //检查接口是否能用
+        com.zkz.yunapiclientsdk.model.User user = new com.zkz.yunapiclientsdk.model.User();
+        user.setName("zkz");
+        String userNameByPost = yunApiClient.getUserNameByPost(user);
+        if (StringUtils.isBlank(userNameByPost)){
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR,"接口异常");
+        }
+        //修改接口信息
+        InterfaceInfo interfaceInfo = new InterfaceInfo();
+        interfaceInfo.setId(id);
+        interfaceInfo.setStatus(InterfaceInfoStatusEnum.ONLINE.getValue());
+        boolean result = interfaceInfoService.updateById(interfaceInfo);
+        return ResultUtils.success(result);
+    }
+
+    /**
+     * 下线
+     *
+     * @param idRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/offline")
+    @AuthCheck(mustRole = "admin")
+    public BaseResponse<Boolean> offLineInterfaceInfo(@RequestBody IdRequest idRequest,
+                                                     HttpServletRequest request) {
+        //参数不为空
+        if (idRequest == null || idRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        long id = idRequest.getId();
+        // 判断接口是否存在
+        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
+        if (oldInterfaceInfo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        //修改接口信息
+        InterfaceInfo interfaceInfo = new InterfaceInfo();
+        interfaceInfo.setId(id);
+        interfaceInfo.setStatus(InterfaceInfoStatusEnum.OFFLINE.getValue());
+        boolean result = interfaceInfoService.updateById(interfaceInfo);
+        return ResultUtils.success(result);
+    }
+    /**
+     * 测试调用
+     *
+     * @param interfaceInfoInvokeRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/invoke")
+// 这里给它新封装一个参数InterfaceInfoInvokeRequest
+// 返回结果把对象发出去就好了，因为不确定接口的返回值到底是什么
+    public BaseResponse<Object> invokeInterfaceInfo(@RequestBody InterfaceInfoInvokeRequest interfaceInfoInvokeRequest,
+                                                    HttpServletRequest request) throws UnsupportedEncodingException {
+        // 检查请求对象是否为空或者接口id是否小于等于0
+        if (interfaceInfoInvokeRequest == null || interfaceInfoInvokeRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 获取接口id
+        long id = interfaceInfoInvokeRequest.getId();
+        // 获取用户请求参数
+        String userRequestParams = interfaceInfoInvokeRequest.getUserRequestParams();
+        // 判断是否存在
+        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
+        if (oldInterfaceInfo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        // 检查接口状态是否为下线状态
+        if (oldInterfaceInfo.getStatus() == InterfaceInfoStatusEnum.OFFLINE.getValue()) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "接口已关闭");
+        }
+        User loginUser = userService.getLoginUser(request);
+        String accessKey = loginUser.getAccessKey();
+        String secretKey = loginUser.getSecretKey();
+        YunApiClient yunApiClient = new YunApiClient(accessKey,secretKey);
+        Gson gson = new Gson();
+        com.zkz.yunapiclientsdk.model.User user = gson.fromJson(userRequestParams, com.zkz.yunapiclientsdk.model.User.class);
+        String userNameByPost = yunApiClient.getUserNameByPost(user);
+        return ResultUtils.success(userNameByPost) ;
+    }
 }

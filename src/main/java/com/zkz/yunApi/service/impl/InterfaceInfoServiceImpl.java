@@ -6,10 +6,7 @@ import com.zkz.yunApi.exception.BusinessException;
 import com.zkz.yunApi.mapper.InterfaceInfoMapper;
 import com.zkz.yunApi.model.entity.InterfaceInfo;
 import com.zkz.yunApi.service.InterfaceInfoService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 
 /**
  * @author Aaaaaaa
@@ -28,19 +25,21 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         String name = InterfaceInfo.getName();
         String description = InterfaceInfo.getDescription();
         String url = InterfaceInfo.getUrl();
-        String requestParams = InterfaceInfo.getRequestParams();
         String requestHeader = InterfaceInfo.getRequestHeader();
         String responseHeader = InterfaceInfo.getResponseHeader();
         Integer status = InterfaceInfo.getStatus();
         String method = InterfaceInfo.getMethod();
         Long userId = InterfaceInfo.getUserId();
-        if (id<=0 || userId<=0){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        if (name.length()>=50){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"名称过长");
         }
+//        if (id<=0 || userId<=0){
+//            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+//        }
         // 创建时，所有参数必须非空
-        if (StringUtils.isAnyBlank(name,url,requestParams,requestHeader,responseHeader,method)){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
+//        if (StringUtils.isAnyBlank(name,url,requestParams,requestHeader,responseHeader,method)){
+//            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+//        }
 
     }
 }

@@ -9,7 +9,7 @@ import com.zkz.yunApi.model.entity.Post;
 * @description 针对表【interface_info(接口信息)】的数据库操作Service
 * @createDate 2024-04-29 13:07:24
 */
-public interface InterfaceInfoService extends IService<InterfaceInfo> {
+public interface  InterfaceInfoService extends IService<InterfaceInfo> {
     /**
      * 校验
      *
