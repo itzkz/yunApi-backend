@@ -1,6 +1,6 @@
 package com.zkz.yunApi.service;
 
-import com.zkz.yunApi.model.entity.User;
+import com.zkz.yunApi.common.model.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

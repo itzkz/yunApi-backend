@@ -1,7 +1,8 @@
 package com.zkz.yunApi.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.zkz.yunApi.model.entity.Post;
+import com.zkz.yunApi.common.model.Post;
+
 
 /**
 * @author zkzli

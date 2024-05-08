@@ -1,13 +1,12 @@
 package com.zkz.yunApi.service.impl;
-
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zkz.yunApi.common.ErrorCode;
+import com.zkz.yunApi.common.model.User;
 import com.zkz.yunApi.exception.BusinessException;
 import com.zkz.yunApi.mapper.UserMapper;
-import com.zkz.yunApi.model.entity.User;
 import com.zkz.yunApi.service.UserService;
 import com.zkz.yunApi.constant.UserConstant;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 @Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
-        implements UserService {
+        implements UserService{
 
     @Resource
     private UserMapper userMapper;
@@ -136,6 +135,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         return currentUser;
     }
+
 
     /**
      * 是否为管理员

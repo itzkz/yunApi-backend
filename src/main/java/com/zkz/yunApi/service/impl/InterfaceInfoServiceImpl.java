@@ -2,9 +2,9 @@ package com.zkz.yunApi.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zkz.yunApi.common.ErrorCode;
+import com.zkz.yunApi.common.model.InterfaceInfo;
 import com.zkz.yunApi.exception.BusinessException;
 import com.zkz.yunApi.mapper.InterfaceInfoMapper;
-import com.zkz.yunApi.model.entity.InterfaceInfo;
 import com.zkz.yunApi.service.InterfaceInfoService;
 import org.springframework.stereotype.Service;
 

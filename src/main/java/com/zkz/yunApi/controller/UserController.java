@@ -6,8 +6,9 @@ import com.zkz.yunApi.common.BaseResponse;
 import com.zkz.yunApi.common.DeleteRequest;
 import com.zkz.yunApi.common.ErrorCode;
 import com.zkz.yunApi.common.ResultUtils;
+import com.zkz.yunApi.common.model.User;
 import com.zkz.yunApi.exception.BusinessException;
-import com.zkz.yunApi.model.entity.User;
+
 import com.zkz.yunApi.model.vo.UserVO;
 import com.zkz.yunApi.service.UserService;
 import com.zkz.yunApi.model.dto.user.*;
@@ -40,6 +41,7 @@ public class UserController {
      * @param userRegisterRequest
      * @return
      */
+    //todo 用户第一次注册的时候免费赠送每个接口100次调用机会 并将用户和每个接口都创建一个UserInterfaceInfo对象插入user_interface_info表中
     @PostMapping("/register")
     public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
         if (userRegisterRequest == null) {

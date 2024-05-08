@@ -3,8 +3,9 @@ package com.zkz.yunApi.aop;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.zkz.yunApi.annotation.AuthCheck;
 import com.zkz.yunApi.common.ErrorCode;
+import com.zkz.yunApi.common.model.User;
 import com.zkz.yunApi.exception.BusinessException;
-import com.zkz.yunApi.model.entity.User;
+
 import com.zkz.yunApi.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;

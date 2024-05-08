@@ -1,10 +1,12 @@
 package com.zkz.yunApi.service.impl;
 
+
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zkz.yunApi.common.ErrorCode;
+import com.zkz.yunApi.common.model.Post;
 import com.zkz.yunApi.exception.BusinessException;
 import com.zkz.yunApi.mapper.PostMapper;
-import com.zkz.yunApi.model.entity.Post;
+
 import com.zkz.yunApi.model.enums.PostGenderEnum;
 import com.zkz.yunApi.model.enums.PostReviewStatusEnum;
 import com.zkz.yunApi.service.PostService;

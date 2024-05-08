@@ -3,19 +3,21 @@ package com.zkz.yunApi.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.zkz.yunApi.annotation.AuthCheck;
 import com.zkz.yunApi.common.*;
+import com.zkz.yunApi.common.model.InterfaceInfo;
+import com.zkz.yunApi.common.model.User;
 import com.zkz.yunApi.constant.CommonConstant;
 import com.zkz.yunApi.exception.BusinessException;
 import com.zkz.yunApi.model.dto.interfaces.InterfaceInfoAddRequest;
 import com.zkz.yunApi.model.dto.interfaces.InterfaceInfoInvokeRequest;
 import com.zkz.yunApi.model.dto.interfaces.InterfaceInfoQueryRequest;
 import com.zkz.yunApi.model.dto.interfaces.InterfaceInfoUpdateRequest;
-import com.zkz.yunApi.model.entity.InterfaceInfo;
-import com.zkz.yunApi.model.entity.User;
 import com.zkz.yunApi.model.enums.InterfaceInfoStatusEnum;
 import com.zkz.yunApi.service.InterfaceInfoService;
 import com.zkz.yunApi.service.UserService;
+
 import com.zkz.yunapiclientsdk.client.YunApiClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -272,6 +274,7 @@ public class InterfaceInfoController {
      * @param request
      * @return
      */
+
     @PostMapping("/invoke")
 // 这里给它新封装一个参数InterfaceInfoInvokeRequest
 // 返回结果把对象发出去就好了，因为不确定接口的返回值到底是什么
@@ -299,8 +302,13 @@ public class InterfaceInfoController {
         String secretKey = loginUser.getSecretKey();
         YunApiClient yunApiClient = new YunApiClient(accessKey,secretKey);
         Gson gson = new Gson();
-        com.zkz.yunapiclientsdk.model.User user = gson.fromJson(userRequestParams, com.zkz.yunapiclientsdk.model.User.class);
-        String userNameByPost = yunApiClient.getUserNameByPost(user);
-        return ResultUtils.success(userNameByPost) ;
+        try {
+            com.zkz.yunapiclientsdk.model.User user = gson.fromJson(userRequestParams, com.zkz.yunapiclientsdk.model.User.class);
+            String userNameByPost = yunApiClient.getUserNameByPost(user);
+            return ResultUtils.success(userNameByPost);
+        } catch (JsonSyntaxException e) {
+            // JSON 解析异常处理
+            return ResultUtils.success(ErrorCode.PARAMS_ERROR);
+        }
     }
 }

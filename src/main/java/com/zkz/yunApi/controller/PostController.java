@@ -1,5 +1,4 @@
 package com.zkz.yunApi.controller;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zkz.yunApi.annotation.AuthCheck;
@@ -7,23 +6,23 @@ import com.zkz.yunApi.common.BaseResponse;
 import com.zkz.yunApi.common.DeleteRequest;
 import com.zkz.yunApi.common.ErrorCode;
 import com.zkz.yunApi.common.ResultUtils;
+import com.zkz.yunApi.common.model.Post;
+import com.zkz.yunApi.common.model.User;
 import com.zkz.yunApi.constant.CommonConstant;
 import com.zkz.yunApi.exception.BusinessException;
 import com.zkz.yunApi.model.dto.post.PostAddRequest;
 import com.zkz.yunApi.model.dto.post.PostQueryRequest;
 import com.zkz.yunApi.model.dto.post.PostUpdateRequest;
-import com.zkz.yunApi.model.entity.Post;
-import com.zkz.yunApi.model.entity.User;
 import com.zkz.yunApi.service.PostService;
 import com.zkz.yunApi.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
 
 /**
  * 帖子接口

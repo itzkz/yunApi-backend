@@ -1,6 +1,6 @@
 package com.zkz.yunApi.model.vo;
 
-import com.zkz.yunApi.model.entity.Post;
+import com.zkz.yunApi.common.model.Post;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

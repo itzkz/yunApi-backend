@@ -1,8 +1,8 @@
 package com.zkz.yunApi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.zkz.yunApi.model.entity.InterfaceInfo;
-import com.zkz.yunApi.model.entity.Post;
+import com.zkz.yunApi.common.model.InterfaceInfo;
+
 
 /**
 * @author Aaaaaaa

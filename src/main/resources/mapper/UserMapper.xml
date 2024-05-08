@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zkz.yunApi.mapper.UserMapper">
 
-    <resultMap id="BaseResultMap" type="com.zkz.yunApi.model.entity.User">
+    <resultMap id="BaseResultMap" type="com.zkz.yunApi.common.model.User">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="userName" column="userName" jdbcType="VARCHAR"/>
         <result property="userAccount" column="userAccount" jdbcType="VARCHAR"/>

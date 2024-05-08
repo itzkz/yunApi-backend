@@ -1,7 +1,8 @@
 package com.zkz.yunApi.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.zkz.yunApi.model.entity.InterfaceInfo;
+import com.zkz.yunApi.common.model.InterfaceInfo;
+
 
 /**
 * @author Aaaaaaa
