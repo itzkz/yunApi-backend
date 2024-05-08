@@ -1,0 +1,9 @@
+
+server:
+  port: 8123
+  servlet:
+    context-path: /api
+yunapi:
+  client:
+    access-key: zkz
+    secret-key: mima
